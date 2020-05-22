@@ -16,7 +16,7 @@ def error(x):
         print("Number too large")
         cls()
         menu()
-    elif x == 'val' or 'typ':
+    elif x == 'generic':
         print("Please try again")
         cls()
         menu()
@@ -29,54 +29,46 @@ def add(x, y):
     # Return the sum of the two inputs
     # Output any relevant error by type
     try:
-        return float(x) + float(y)
-    except ValueError:
-        error('val')
+        return x + y
+    except (ValueError, TypeError):
+        error('generic')
     except OverflowError:
         error('over')
-    except TypeError:
-        error('typ')
 
 
 def subtract(x, y):
     # Return the difference between the two inputs
     # Output any relevant error by type
     try:
-        return float(x)-float(y)
-    except ValueError:
-        error('val')
+        return x - y
+    except (ValueError, TypeError):
+        error('gen')
     except OverflowError:
         error('over')
-    except TypeError:
-        error('typ')
 
 
 def multiply(x, y):
     # Return the product of the two inputs
     # Output any relevant error by type
     try:
-        return float(x) * float(y)
-    except ValueError:
-        error('val')
+        return x * y
+    except (ValueError, TypeError):
+        error('generic')
     except OverflowError:
         error('over')
-    except TypeError:
-        error('typ')
 
 
 def divide(x, y):
     # Return the quotient of the two inputs
     # Output any relevant error by type
     try:
-        return float(x) / float(y)
+        return x / y
     except ZeroDivisionError:
         error('zero')
-    except ValueError:
-        error('val')
+    except (ValueError, TypeError):
+        error('generic')
     except OverflowError:
         error('over')
-    except TypeError:
-        error('typ')
 
 
 def menu():
@@ -86,7 +78,8 @@ def menu():
         print("1. Addition '+'? \n2. Subtraction '-'? \n3. Multiplication '*'? \n4. Division '/'?")
         print("Enter 'quit' to quit the program")
         user_input = input(":  ")
-        if user_input == 'quit':
+        ui_low = user_input.lower()
+        if 'quit' in ui_low:
             # Quit program
             cls()
             break
@@ -94,19 +87,19 @@ def menu():
             # Obtain user input to then perform desired operation and output
             x = float(input("First number?:"))
             y = float(input("Second number?:"))
-            if user_input == 'addition' or '+' or 'add' or '1':
-                print(add(x,y))
-            elif user_input == 'subtraction' or '-' or 'subtract' or '2':
-                print(subtract(x, y))
+            if ui_low in ['addition', '+', 'add', '1']:
+                print(x, '+', y, '=', add(x, y))
+            elif ui_low in ['subtraction', '-', 'subtract', '2']:
+                print(x, '-', y, '=', subtract(x, y))
                 continue
-            elif user_input == 'multiplication' or '*' or 'multiply' or '3' or 'x':
-                print(multiply(x, y))
+            elif ui_low in ['multiplication', '*', 'multiply', '3', 'x']:
+                print(x, 'x', y, '=', multiply(x, y))
                 continue
-            elif user_input == 'division' or '/' or 'divide' or '4':
-                print(divide(x, y))
+            elif ui_low in ['division', '/', 'divide', '4']:
+                print(x, '/', y, '=', divide(x, y))
                 continue
             else:
-                error('val')
+                error('generic')
 
 
 menu()
