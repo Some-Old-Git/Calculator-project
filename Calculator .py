@@ -1,168 +1,198 @@
 import os
+import math
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
 
 
 def cls():
+    """
+    Check which OS, and clear last screen
+    """
     # TODO: Check if this covers all systems
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def error(x):
-    # Handle input and computation errors by type
-    # TODO: Find out if there is a way to compress this
+def get_in(x):
+    """
+    Obtain, and return, required user input
+    """
+    try:
+        if x == "1":
+            x = float(input("Enter number: "))
+            return x
+        elif x == "2":
+            x = float(input("Enter first number: "))
+            y = float(input("Enter second number: "))
+            return x, y
+    except Exception as e:
+        expt(e.args)
+
+
+def expt(e):
+    """
+    Handle exceptions by type
+    """
+    # print(e)
     print("An error has occurred")
-    if x == 'zero':
+    if 'float division by zero' in e:
         print("Unable to divide by zero")
         cls()
         menu()
-    elif x == 'over':
-        print("Number too large")
+    elif 'factorial() argument should not exceed 2147483647' in e:
+        print('That number is too large, sorry')
         cls()
         menu()
-    elif x == 'generic':
+    elif 'generic' in e:
         print("Please try again")
         cls()
         menu()
-    elif x == 'debug':
-        print('Failure to pass test \n Run debug')
-        cls()
-        exit()
-    else:
+    elif 'could not convert string' or "'NoneType' object is not subscriptable" in e:
+        print('Incorrect input, please try again')
         cls()
         menu()
-
-
-def debug():
-    # Test functions to ensure working correctly
-    try:
-        print('Testing addition')
-        assert add(1, 2) == 3
-        print('Testing subtraction')
-        assert subtract(2, 1) == 1
-        print('Testing multiplication')
-        assert multiply(2, 2) == 4
-        print('Testing division')
-        assert divide(2, 1) == 2
-        print('Testing exponentiation')
-        assert exponent(2, 2) == 4
-        print('Tests passed')
-        menu()
-    except AssertionError:
-        error('debug')
 
 
 def add(x, y):
-    # Return the sum of the two inputs
-    # Output any relevant error by type
+    """
+    Take two numbers, and print the sum
+    :param x: 1
+    :param y: 2
+    :return: 3
+    """
     try:
-        assert x + y >= x
-        return x + y
-    except (ValueError, TypeError):
-        error('generic')
-    except OverflowError:
-        error('over')
-    except AssertionError:
-        error('debug')
+        print(x, '+', y, '=', x + y)
+        menu()
+    except Exception as e:
+        expt(e.args)
 
 
 def subtract(x, y):
-    # Return the difference between the two inputs
-    # Output any relevant error by type
+    """
+    Take two numbers, and print the difference
+    :param x: 2
+    :param y: 1
+    :return: 1
+    """
     try:
-        assert x - y <= x
-        return x - y
-    except (ValueError, TypeError):
-        error('gen')
-    except OverflowError:
-        error('over')
-    except AssertionError:
-        error('debug')
+        print(x, '-', y, '=', x - y)
+        menu()
+    except Exception as e:
+        expt(e.args)
 
 
 def multiply(x, y):
-    # Return the product of the two inputs
-    # Output any relevant error by type
+    """
+    Take two numbers, and print the product
+    :param x: 1
+    :param y: 2
+    :return: 2
+    """
     try:
-        assert x * y >= x
-        return x * y
-    except (ValueError, TypeError):
-        error('generic')
-    except OverflowError:
-        error('over')
-    except AssertionError:
-        error('debug')
+        print(x, 'x', y, '=', x * y)
+        menu()
+    except Exception as e:
+        expt(e.args)
 
 
 def divide(x, y):
-    # Return the quotient of the two inputs
-    # Output any relevant error by type
-    # TODO: Find out if there is a way to remove divide by zero error
+    """
+    Take two numbers, and print the quotient
+    :param x: 2
+    :param y: 2
+    :return: 1
+    """
+    # TODO: Find out if there is a way to work around divide by zero error
     try:
-        assert x / y <= x
-        return x / y
-    except ZeroDivisionError:
-        error('zero')
-    except (ValueError, TypeError):
-        error('generic')
-    except OverflowError:
-        error('over')
-    except AssertionError:
-        error('debug')
+        if x or y == 0:
+            print("0")
+        print(x, '/', y, '=', x / y)
+        menu()
+    except Exception as e:
+        expt(e.args)
 
 
 def exponent(x, y):
-    # Return the exponent of the two inputs
-    # Output any relevant error by type
+    """
+    Take two numbers, and print exponentiation
+    :param x: 2
+    :param y: 2
+    :return: 4
+    """
     try:
-        assert x ** y >= x
-        return x ** y
-    except (ValueError, TypeError):
-        error('generic')
-    except OverflowError:
-        error('over')
-    except AssertionError:
-        error('debug')
+        print(x, '^', y, '=', x ** y)
+        menu()
+    except Exception as e:
+        expt(e.args)
+
+
+def fact(x):
+    """
+    Take one number, and print the factorial
+    :param x: 2
+    :return: 2
+    """
+    try:
+        print(x, "factorial =", math.factorial(x))
+        menu()
+    except ValueError:
+        print("Must be a positive whole number")
+        fact(get_in("1"))
+    except Exception as e:
+        expt(e.args)
 
 
 def menu():
     while True:
-        # Obtain user operation selection
+        """
+        Obtain user operation selection
+        """
         # TODO: Learn how to turn this in to a GUI
-        print("Which operation do you wish to perform?")
+        print("\nWhich operation do you wish to perform?")
         print("1. Addition '+'? \n2. Subtraction '-'? \n3. Multiplication '*'? \n4. Division '/'?")
-        print("5. Exponentiation '^'?")
+        print("5. Exponentiation '^'? \n6. Factorial '!'? ")
         print("Enter 'quit' to quit the program")
         user_input = input(":  ")
         ui_low = user_input.lower()
-        if 'quit' in ui_low:
-            # Quit program
+        if ui_low in ['quit', 'q', 'exit']:
+            """
+            Quit program at user selection
+            """
             cls()
+            print("You've tried the best, now try the rest")
             break
-        elif 'debug' in ui_low:
-            debug()
         else:
-            # Obtain user input to then perform desired operation and output
+            """
+            Obtain user input and, call selected function/operation, and output return
+            """
             # TODO: Add more operations
+            """
+            Call for user input, and relevant operation
+            """
             try:
-                x = float(input("First number?:"))
-                y = float(input("Second number?:"))
                 if ui_low in ['addition', '+', 'add', '1']:
-                    print(x, '+', y, '=', add(x, y))
+                    n = get_in("2")
+                    add(n[0], n[1])
                 elif ui_low in ['subtraction', '-', 'subtract', '2']:
-                    print(x, '-', y, '=', subtract(x, y))
-                    continue
+                    n = get_in("2")
+                    subtract(n[0], n[1])
                 elif ui_low in ['multiplication', '*', 'multiply', '3', 'x']:
-                    print(x, 'x', y, '=', multiply(x, y))
-                    continue
+                    n = get_in("2")
+                    multiply(n[0], n[1])
                 elif ui_low in ['division', '/', 'divide', '4']:
-                    print(x, '/', y, '=', divide(x, y))
-                    continue
+                    n = get_in("2")
+                    divide(n[0], n[1])
                 elif ui_low in ['exponents', '^', 'power', '5']:
-                    print(x, '^', y, '=', exponent(x, y))
+                    n = get_in("2")
+                    exponent(n[0], n[1])
+                elif ui_low in ['fact', '!', 'factorial', '6']:
+                    n = get_in("1")
+                    fact(n)
                 else:
-                    error('generic')
-            except ValueError:
-                print("Sorry, I didn't learn algebra in school, please enter numbers only")
-                menu()
+                    e = 'generic'
+                    expt(e)
+            except Exception as e:
+                expt(e.args)
 
 
 menu()
